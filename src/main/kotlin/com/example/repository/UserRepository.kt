@@ -7,5 +7,6 @@ import com.example.utils.BaseResponse
 interface UserRepository {
     suspend fun registerUser(params: CreateUserParams): BaseResponse<Any>
     suspend fun loginUser(username: String, password: String): BaseResponse<Any>
+    suspend fun getUsers(): List<User?>
 
 }

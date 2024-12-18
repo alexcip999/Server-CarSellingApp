@@ -7,6 +7,7 @@ import com.example.security.hash
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.statements.InsertStatement
 
 class UserServiceImpl: UserService {
@@ -28,6 +29,11 @@ class UserServiceImpl: UserService {
         }
         return user
     }
+
+    override suspend fun getUsers(): List<User?> =
+        dbQuery {
+            UserTable.selectAll().map { rowToUser(it) }
+        }
 
     private fun rowToUser(row: ResultRow?): User? {
         return if(row == null) null

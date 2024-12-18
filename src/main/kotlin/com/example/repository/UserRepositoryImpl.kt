@@ -1,5 +1,6 @@
 package com.example.repository
 
+import com.example.models.User
 import com.example.security.JwtConfig
 import com.example.security.hash
 import com.example.service.CreateUserParams
@@ -41,6 +42,13 @@ class UserRepositoryImpl(
             BaseResponse.ErrorResponse("Invalid username or password", message = "Error")
         }
     }
+
+    override suspend fun getUsers(): List<User?> {
+        val users = userService.getUsers()
+        return users
+    }
+
+
 
     private suspend fun isUsernameExist(username: String): Boolean {
         return userService.findUserByUsername(username) != null
