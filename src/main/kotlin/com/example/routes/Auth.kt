@@ -17,12 +17,14 @@ fun Application.authRoutes(
                 val params = call.receive<CreateUserParams>()
                 val result = repository.registerUser(params)
                 call.respond(result)
+                println(result.toString())
             }
 
             post("/login"){
                 val params = call.receive<LoginUserParams>()
                 val result = repository.loginUser(params.username, params.password)
                 call.respond(result)
+                println(result.toString())
             }
         }
 
@@ -30,6 +32,7 @@ fun Application.authRoutes(
             get{
                 val result = repository.getUsers()
                 call.respond(result)
+                println(result.toString())
             }
         }
     }

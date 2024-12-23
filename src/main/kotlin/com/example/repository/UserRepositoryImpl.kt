@@ -19,7 +19,7 @@ class UserRepositoryImpl(
                 if(user != null){
                     val token = JwtConfig.instance.createAccessToken(user.id)
                     user.authToken = token
-                    BaseResponse.SuccessResponse(user, message = "Success")
+                    BaseResponse.SuccessResponse("Success Register", message = "Success")
                 }else{
                     BaseResponse.ErrorResponse("Invalid username or password", message = "Error")
                 }
@@ -33,7 +33,7 @@ class UserRepositoryImpl(
     override suspend fun loginUser(username: String, password: String): BaseResponse<Any> {
         val user = userService.findUserByUsername(username)
         return if (user != null){
-            if (user.password == password){
+            if (user.password == hash(password)){
                 BaseResponse.SuccessResponse("Success logging", message = "Success")
             }else{
                 BaseResponse.ErrorResponse("Incorrect password", message = "Error")
