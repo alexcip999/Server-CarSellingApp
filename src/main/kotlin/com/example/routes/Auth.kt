@@ -2,6 +2,7 @@ package com.example.routes
 
 import com.example.repository.UserRepository
 import com.example.service.CreateUserParams
+import com.example.service.ForgotPasswordParams
 import com.example.service.LoginUserParams
 import io.ktor.server.application.*
 import io.ktor.server.request.*
@@ -25,6 +26,13 @@ fun Application.authRoutes(
                 val result = repository.loginUser(params.username, params.password)
                 call.respond(result)
                 println(result.toString())
+            }
+
+            post("/forgot-password"){
+                val params = call.receive<ForgotPasswordParams>()
+                val result = repository.forgotPassword(params)
+                call.respond(result)
+                print(result.toString())
             }
         }
 

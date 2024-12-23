@@ -4,6 +4,7 @@ import com.example.models.User
 import com.example.security.JwtConfig
 import com.example.security.hash
 import com.example.service.CreateUserParams
+import com.example.service.ForgotPasswordParams
 import com.example.service.UserService
 import com.example.utils.BaseResponse
 
@@ -48,6 +49,22 @@ class UserRepositoryImpl(
         return users
     }
 
+    override suspend fun forgotPassword(params: ForgotPasswordParams): BaseResponse<Any> {
+        return if (isUsernameExist(params.username)){
+            if (params.password == params.passwordConfirmation){
+                val user = userService.forgotPassword(params)
+                if (user != null){
+                    BaseResponse.SuccessResponse("Password Changed", "Success")
+                }else{
+                    BaseResponse.ErrorResponse("User do not exist", "Error")
+                }
+            }else{
+                BaseResponse.ErrorResponse("The passwords do not match", "Error")
+            }
+        }else{
+            BaseResponse.ErrorResponse("User do not exist", message = "Error")
+        }
+    }
 
 
     private suspend fun isUsernameExist(username: String): Boolean {

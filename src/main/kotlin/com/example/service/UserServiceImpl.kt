@@ -4,10 +4,7 @@ import com.example.db.DatabaseFactory.dbQuery
 import com.example.db.UserTable
 import com.example.models.User
 import com.example.security.hash
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.InsertStatement
 
 class UserServiceImpl: UserService {
@@ -34,6 +31,22 @@ class UserServiceImpl: UserService {
         dbQuery {
             UserTable.selectAll().map { rowToUser(it) }
         }
+
+    override suspend fun forgotPassword(params: ForgotPasswordParams): User? {
+        return dbQuery {
+            val updateRow = UserTable.update({UserTable.username eq  params.username}) {
+                it[password] = hash(params.password)
+            }
+
+            if (updateRow == 1){
+                UserTable.select{ UserTable.username eq params.username}
+                    .map { rowToUser(it) }
+                    .singleOrNull()
+            }else{
+                null
+            }
+        }
+    }
 
     private fun rowToUser(row: ResultRow?): User? {
         return if(row == null) null
