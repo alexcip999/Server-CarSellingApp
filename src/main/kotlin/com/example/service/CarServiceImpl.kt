@@ -5,12 +5,11 @@ import com.example.db.CarTable
 import com.example.db.DatabaseFactory.dbQuery
 import com.example.models.Car
 import com.example.models.CombustibleType
-import com.example.utils.BaseResponse
+import com.example.service.dto.UploadCarParams
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.statements.InsertStatement
 
 class CarServiceImpl : CarService {
     override suspend fun uploadCar(params: UploadCarParams): Car? {
@@ -28,6 +27,7 @@ class CarServiceImpl : CarService {
                 it[capacity] = params.capacity
                 it[price] = params.price
                 it[mark] = params.mark
+                it[model] = params.model
                 it[color] = params.color
                 it[seller] = params.seller
                 it[principalImageUri] = params.principalImageUri
@@ -86,6 +86,7 @@ class CarServiceImpl : CarService {
             price = carRow[CarTable.price],
             description = carRow[CarTable.description],
             mark = carRow[CarTable.mark],
+            model = carRow[CarTable.model],
             color = carRow[CarTable.color],
             seller = carRow[CarTable.seller],
             principalImageUri = carRow[CarTable.principalImageUri],

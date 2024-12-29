@@ -1,4 +1,4 @@
-package com.example.service
+package com.example.service.dto
 
 import com.example.models.CombustibleType
 
@@ -15,6 +15,7 @@ data class UploadCarParams(
     // more details
     val description: String,
     val mark: String,
+    val model: String,
     val color: String,
     val seller: String,
 

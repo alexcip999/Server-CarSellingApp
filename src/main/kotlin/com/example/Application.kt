@@ -1,17 +1,11 @@
 package com.example
 
 import com.example.db.DatabaseFactory
-import com.example.repository.CarRepository
-import com.example.repository.CarRepositoryImpl
-import com.example.repository.UserRepository
-import com.example.repository.UserRepositoryImpl
+import com.example.repository.*
 import com.example.routes.authRoutes
 import com.example.security.configureSecurity
 import com.example.security.hash
-import com.example.service.CarService
-import com.example.service.CarServiceImpl
-import com.example.service.UserService
-import com.example.service.UserServiceImpl
+import com.example.service.*
 import io.ktor.serialization.jackson.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -34,8 +28,13 @@ fun Application.module() {
     val userRepository: UserRepository = UserRepositoryImpl(userService)
     val carService: CarService = CarServiceImpl()
     val carRepository: CarRepository = CarRepositoryImpl(carService)
+    val userDetailsService: UserDetailsService = UserDetailsServiceImpl()
+    val userDetailsRepository: UserDetailsRepository = UserDetailsRepositoryImpl(userDetailsService)
 
-    authRoutes(userRepository = userRepository, carRepository = carRepository)
-
+    authRoutes(
+        userRepository = userRepository,
+        carRepository = carRepository,
+        userDetailsRepository = userDetailsRepository
+        )
 
 }

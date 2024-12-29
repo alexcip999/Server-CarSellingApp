@@ -1,6 +1,6 @@
-package com.example.service
+package com.example.service.dto
 
-data class ForgotPasswordParams(
+data class CreateUserParams(
     val username: String,
     val password: String,
     val passwordConfirmation: String

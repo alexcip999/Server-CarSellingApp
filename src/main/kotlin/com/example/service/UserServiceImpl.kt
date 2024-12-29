@@ -4,6 +4,8 @@ import com.example.db.DatabaseFactory.dbQuery
 import com.example.db.UserTable
 import com.example.models.User
 import com.example.security.hash
+import com.example.service.dto.CreateUserParams
+import com.example.service.dto.ForgotPasswordParams
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.InsertStatement
 

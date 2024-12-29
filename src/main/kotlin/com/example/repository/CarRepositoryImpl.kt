@@ -2,9 +2,9 @@ package com.example.repository
 
 import com.example.models.Car
 import com.example.service.CarService
-import com.example.service.GetCarsByIdParam
-import com.example.service.GetCarsByMark
-import com.example.service.UploadCarParams
+import com.example.service.dto.GetCarsByIdParam
+import com.example.service.dto.GetCarsByMark
+import com.example.service.dto.UploadCarParams
 import com.example.utils.BaseResponse
 
 class CarRepositoryImpl(

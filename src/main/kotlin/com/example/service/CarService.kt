@@ -1,7 +1,7 @@
 package com.example.service
 
 import com.example.models.Car
-import com.example.utils.BaseResponse
+import com.example.service.dto.UploadCarParams
 
 interface CarService {
     suspend fun uploadCar(params: UploadCarParams): Car?

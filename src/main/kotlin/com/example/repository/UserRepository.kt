@@ -1,8 +1,8 @@
 package com.example.repository
 
 import com.example.models.User
-import com.example.service.CreateUserParams
-import com.example.service.ForgotPasswordParams
+import com.example.service.dto.CreateUserParams
+import com.example.service.dto.ForgotPasswordParams
 import com.example.utils.BaseResponse
 
 interface UserRepository {

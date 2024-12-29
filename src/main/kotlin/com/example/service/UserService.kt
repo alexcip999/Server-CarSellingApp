@@ -1,6 +1,8 @@
 package com.example.service
 
 import com.example.models.User
+import com.example.service.dto.CreateUserParams
+import com.example.service.dto.ForgotPasswordParams
 
 interface UserService {
     suspend fun registerUser(params: CreateUserParams): User?

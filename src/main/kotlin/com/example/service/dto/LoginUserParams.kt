@@ -1,4 +1,4 @@
-package com.example.service
+package com.example.service.dto
 
 data class LoginUserParams(
     val username: String,

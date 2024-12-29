@@ -15,6 +15,7 @@ object DatabaseFactory {
             SchemaUtils.create(UserTable)
             SchemaUtils.create(CarTable)
             SchemaUtils.create(CarImagesTable)
+            SchemaUtils.create(UserDetailsTable)
         }
     }
 

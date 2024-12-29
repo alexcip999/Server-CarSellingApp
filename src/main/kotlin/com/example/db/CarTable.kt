@@ -13,6 +13,7 @@ object CarTable : Table("cars") {
     val price = varchar("price", 20)
     val description = text("description")
     val mark = varchar("mark", 50)
+    val model = varchar("model", 255)
     val color = varchar("color", 30)
     val seller = varchar("seller", 50)
     val principalImageUri = varchar("principal_image_uri", 255)

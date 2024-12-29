@@ -13,6 +13,7 @@ data class Car(
     // more details
     val description: String,
     val mark: String,
+    val model: String,
     val color: String,
     val seller: String,
 
