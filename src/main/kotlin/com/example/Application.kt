@@ -26,15 +26,20 @@ fun Application.module() {
 
     val userService: UserService = UserServiceImpl()
     val userRepository: UserRepository = UserRepositoryImpl(userService)
+
     val carService: CarService = CarServiceImpl()
     val carRepository: CarRepository = CarRepositoryImpl(carService)
+
     val userDetailsService: UserDetailsService = UserDetailsServiceImpl()
     val userDetailsRepository: UserDetailsRepository = UserDetailsRepositoryImpl(userDetailsService)
 
+    val favsService: FavsService = FavsServiceImpl()
+    val favsRepository: FavsRepository = FavsRepositoryImpl(favsService)
     authRoutes(
         userRepository = userRepository,
         carRepository = carRepository,
-        userDetailsRepository = userDetailsRepository
+        userDetailsRepository = userDetailsRepository,
+        favsRepository = favsRepository,
         )
 
 }

@@ -2,6 +2,7 @@ package com.example.routes
 
 import com.example.models.UserDetails
 import com.example.repository.CarRepository
+import com.example.repository.FavsRepository
 import com.example.repository.UserDetailsRepository
 import com.example.repository.UserRepository
 import com.example.service.dto.*
@@ -13,7 +14,8 @@ import io.ktor.server.routing.*
 fun Application.authRoutes(
     userRepository: UserRepository,
     carRepository: CarRepository,
-    userDetailsRepository: UserDetailsRepository
+    userDetailsRepository: UserDetailsRepository,
+    favsRepository: FavsRepository
 ) {
     routing {
         route("/auth"){
@@ -82,6 +84,20 @@ fun Application.authRoutes(
             post("/saveUserDetails"){
                 val param = call.receive<UserDetailsParam>()
                 val result = userDetailsRepository.saveUserDetails(param)
+                call.respond(result)
+            }
+        }
+
+        route("/favorite"){
+            post("/addFavCar"){
+                val param = call.receive<FavsParam>()
+                val result = favsRepository.addFavCar(param)
+                call.respond(result)
+            }
+
+            post("/getFavCarsById"){
+                val param = call.receive<GetFavCarsById>()
+                val result = favsRepository.getCarsById(param)
                 call.respond(result)
             }
         }
