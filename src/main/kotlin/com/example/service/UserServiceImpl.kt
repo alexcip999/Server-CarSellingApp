@@ -29,6 +29,14 @@ class UserServiceImpl: UserService {
         return user
     }
 
+    override suspend fun getUserByUsername(username: String): User? {
+        val user = dbQuery {
+            UserTable.select { UserTable.username eq username }
+                .map { rowToUser(it) }.singleOrNull()
+        }
+        return user
+    }
+
     override suspend fun getUsers(): List<User?> =
         dbQuery {
             UserTable.selectAll().map { rowToUser(it) }

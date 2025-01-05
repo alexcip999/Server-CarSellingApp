@@ -39,6 +39,12 @@ fun Application.authRoutes(
                 call.respond(result)
                 print(result.toString())
             }
+
+            post("/findUser") {
+                val param = call.receive<GetUserByUsername>()
+                val result = userRepository.getUserByUsername(param.username)
+                call.respond(result)
+            }
         }
 
         route("/users"){

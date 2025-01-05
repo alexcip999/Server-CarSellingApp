@@ -10,5 +10,6 @@ interface UserRepository {
     suspend fun loginUser(username: String, password: String): BaseResponse<Any>
     suspend fun getUsers(): List<User?>
     suspend fun forgotPassword(params: ForgotPasswordParams): BaseResponse<Any>
+    suspend fun getUserByUsername(username: String): BaseResponse<Any>
 
 }

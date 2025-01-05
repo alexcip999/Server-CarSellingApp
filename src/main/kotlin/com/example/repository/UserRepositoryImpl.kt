@@ -66,6 +66,15 @@ class UserRepositoryImpl(
         }
     }
 
+    override suspend fun getUserByUsername(username: String): BaseResponse<Any> {
+        val userDetails = userService.getUserByUsername(username)
+        return if (userDetails != null){
+            BaseResponse.SuccessResponse(userDetails, message = "Success")
+        }else{
+            BaseResponse.ErrorResponse("User do not exist", message = "Error")
+        }
+    }
+
 
     private suspend fun isUsernameExist(username: String): Boolean {
         return userService.findUserByUsername(username) != null
