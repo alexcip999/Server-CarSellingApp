@@ -101,9 +101,21 @@ fun Application.authRoutes(
                 call.respond(result)
             }
 
+            post("/isFav"){
+                val param = call.receive<FavsParam>()
+                val result = favsRepository.isFavCar(param)
+                call.respond(result)
+            }
+
             post("/getFavCarsById"){
                 val param = call.receive<GetFavCarsById>()
                 val result = favsRepository.getCarsById(param)
+                call.respond(result)
+            }
+
+            post("/removeFavCar"){
+                val param = call.receive<FavsParam>()
+                val result = favsRepository.deleteFavCar(param)
                 call.respond(result)
             }
         }

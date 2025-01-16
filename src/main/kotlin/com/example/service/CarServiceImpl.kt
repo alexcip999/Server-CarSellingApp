@@ -77,6 +77,7 @@ class CarServiceImpl : CarService {
             .map { it[CarImagesTable.imageUri] }
 
         return Car(
+            id = carId,
             idUser = carRow[CarTable.userId],
             year = carRow[CarTable.year],
             km = carRow[CarTable.km],

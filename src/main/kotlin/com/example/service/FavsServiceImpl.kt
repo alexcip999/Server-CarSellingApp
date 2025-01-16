@@ -10,11 +10,11 @@ import com.example.models.CombustibleType
 import com.example.models.Favs
 import com.example.service.dto.FavsParam
 import com.example.service.dto.GetFavCarsById
-import org.jetbrains.exposed.sql.ResultRow
+import com.example.utils.BaseResponse
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.statements.InsertStatement
+
 
 class FavsServiceImpl : FavsService {
     override suspend fun addFavCar(param: FavsParam): Favs? {
@@ -41,6 +41,28 @@ class FavsServiceImpl : FavsService {
         }
     }
 
+    override suspend fun isFavCar(param: FavsParam): Boolean {
+        return dbQuery {
+            LikesTable.select {
+                (LikesTable.userId eq param.userId) and (LikesTable.carId eq param.carId) // Ensure column names match the table schema
+            }.count() > 0 // Check if any records exist
+        }
+    }
+
+
+    override suspend fun deleteFavCar(param: FavsParam): Boolean {
+        return dbQuery {
+            // Delete the favorite car from LikesTable where userId and carId match the provided parameters
+            val deletedCount = LikesTable.deleteWhere {
+                (LikesTable.userId eq param.userId) and (LikesTable.carId eq param.carId)
+            }
+
+            // Return true if at least one row was deleted, otherwise false
+            deletedCount > 0
+        }
+    }
+
+
     private fun rowToFav(row: ResultRow?): Favs? {
         return if (row == null) null
         else Favs(
@@ -57,6 +79,7 @@ class FavsServiceImpl : FavsService {
             .map { it[CarImagesTable.imageUri] }
 
         return Car(
+            id = carId,
             idUser = carRow[CarTable.userId],
             year = carRow[CarTable.year],
             km = carRow[CarTable.km],

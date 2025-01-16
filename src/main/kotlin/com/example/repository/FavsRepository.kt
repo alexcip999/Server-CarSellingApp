@@ -9,4 +9,6 @@ import com.example.utils.BaseResponse
 interface FavsRepository {
     suspend fun addFavCar(param: FavsParam): BaseResponse<Any>
     suspend fun getCarsById(param: GetFavCarsById): List<Car?>
+    suspend fun isFavCar(param: FavsParam): BaseResponse<Any>
+    suspend fun deleteFavCar(param: FavsParam): BaseResponse<Any>
 }

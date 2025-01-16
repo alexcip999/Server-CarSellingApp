@@ -1,6 +1,7 @@
 package com.example.models
 
 data class Car(
+    val id: Int?,
     // common id from the user who upload this car
     val idUser: Int,
     // details for card component

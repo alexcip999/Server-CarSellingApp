@@ -23,4 +23,22 @@ class FavsRepositoryImpl(
         val favs = service.getCarsById(param)
         return favs
     }
+
+    override suspend fun isFavCar(param: FavsParam): BaseResponse<Any> {
+        val isFav = service.isFavCar(param)
+        return if(isFav){
+            BaseResponse.SuccessResponse("Car exists", "Success")
+        }else{
+            BaseResponse.ErrorResponse("Car does not exists", "Error")
+        }
+    }
+
+    override suspend fun deleteFavCar(param: FavsParam): BaseResponse<Any> {
+        val isDeleted = service.deleteFavCar(param)
+        return if (isDeleted) {
+            BaseResponse.SuccessResponse("Car deleted", "Success")
+        }else{
+            BaseResponse.ErrorResponse("Car delete failed", "Error")
+        }
+    }
 }
