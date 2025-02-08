@@ -1,7 +1,8 @@
 package com.example.service.dto
 
 data class CreateUserParams(
-    val username: String,
+    val name: String,
+    val email: String,
     val password: String,
     val passwordConfirmation: String
 )

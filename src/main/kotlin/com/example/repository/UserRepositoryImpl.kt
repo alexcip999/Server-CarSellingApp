@@ -4,80 +4,84 @@ import com.example.models.User
 import com.example.security.JwtConfig
 import com.example.security.hash
 import com.example.service.dto.CreateUserParams
-import com.example.service.dto.ForgotPasswordParams
 import com.example.service.UserService
+import com.example.service.dto.ChangePassParam
+import com.example.service.dto.LoginParam
+import com.example.service.dto.VerifyUserParam
 import com.example.utils.BaseResponse
 
 class UserRepositoryImpl(
     private val userService: UserService,
 ): UserRepository {
     override suspend fun registerUser(params: CreateUserParams): BaseResponse<Any> {
-        return if (isUsernameExist(params.username)) {
-            BaseResponse.ErrorResponse("Username already exists", message = "Error")
+        return if (existUserByName(params.name)) {
+            BaseResponse.ErrorResponse("Username already exists", "Error")
         }else{
-            if (params.password == params.passwordConfirmation){
-                val user = userService.registerUser(params)
-                if(user != null){
-                    val token = JwtConfig.instance.createAccessToken(user.id)
-                    user.authToken = token
-                    BaseResponse.SuccessResponse("Success Register", message = "Success")
+            if (isEmailValid(params.email)) {
+                if (matchPasswords(params.password, params.passwordConfirmation)) {
+                    if (existUserByEmail(params.email)) {
+                        BaseResponse.ErrorResponse("Email already exists", "Error")
+                    }else{
+                        userService.registerUser(params)
+                        BaseResponse.SuccessResponse("Successfully registered user", "Success")
+                    }
                 }else{
-                    BaseResponse.ErrorResponse("Invalid username or password", message = "Error")
+                   BaseResponse.ErrorResponse("Passwords do not match", "Error")
                 }
-            } else{
-                BaseResponse.ErrorResponse("Passwords don't match", message = "Error")
+            }else{
+                BaseResponse.ErrorResponse("Invalid email format", "Error")
             }
-
         }
     }
 
-    override suspend fun loginUser(username: String, password: String): BaseResponse<Any> {
-        val user = userService.findUserByUsername(username)
+    override suspend fun loginUser(param: LoginParam): BaseResponse<Any> {
+        val user = userService.findUserByEmail(param.email)
         return if (user != null){
-            if (user.password == hash(password)){
-                BaseResponse.SuccessResponse("Success logging", message = "Success")
+            if(matchPasswords(hash(param.password), user.password)){
+                BaseResponse.SuccessResponse("Login successful", "Success")
             }else{
-                BaseResponse.ErrorResponse("Incorrect password", message = "Error")
+                BaseResponse.ErrorResponse("Wrong Password", "Error")
             }
         }else{
-            BaseResponse.ErrorResponse("Invalid username or password", message = "Error")
+            BaseResponse.ErrorResponse("Wrong Email", "Error")
         }
     }
+
+    override suspend fun verifyUser(param: VerifyUserParam): BaseResponse<Any> {
+        return if (userService.findUserByEmail(param.email) == null){
+            BaseResponse.ErrorResponse("Invalid user email", "Error")
+        }else{
+            BaseResponse.SuccessResponse("Successfully verified user", "Success")
+        }
+    }
+
+    override suspend fun changePasswordUser(param: ChangePassParam): BaseResponse<Any> {
+        return if (hash(param.passwordConfirmation) == hash(param.newPassword)){
+            userService.changePassword(param.email, param.newPassword)
+            BaseResponse.SuccessResponse("Password changed", "Success")
+        }else{
+            BaseResponse.ErrorResponse("The passwords don't match", "Error")
+        }
+    }
+
+
+    private suspend fun existUserByName(name: String) : Boolean =
+        userService.findUserByName(name) != null
+
+    private suspend fun isEmailValid(email: String): Boolean =
+        userService.isEmailValid(email)
+
+    private suspend fun existUserByEmail(email: String) : Boolean =
+        userService.findUserByEmail(email) != null
+
+    private suspend fun matchPasswords(pass1: String, pass2: String): Boolean =
+        userService.matchPasswords(pass1, pass2)
 
     override suspend fun getUsers(): List<User?> {
         val users = userService.getUsers()
         return users
     }
 
-    override suspend fun forgotPassword(params: ForgotPasswordParams): BaseResponse<Any> {
-        return if (isUsernameExist(params.username)){
-            if (params.password == params.passwordConfirmation){
-                val user = userService.forgotPassword(params)
-                if (user != null){
-                    BaseResponse.SuccessResponse("Password Changed", "Success")
-                }else{
-                    BaseResponse.ErrorResponse("User do not exist", "Error")
-                }
-            }else{
-                BaseResponse.ErrorResponse("The passwords do not match", "Error")
-            }
-        }else{
-            BaseResponse.ErrorResponse("User do not exist", message = "Error")
-        }
-    }
 
-    override suspend fun getUserByUsername(username: String): BaseResponse<Any> {
-        val userDetails = userService.getUserByUsername(username)
-        return if (userDetails != null){
-            BaseResponse.SuccessResponse(userDetails, message = "Success")
-        }else{
-            BaseResponse.ErrorResponse("User do not exist", message = "Error")
-        }
-    }
-
-
-    private suspend fun isUsernameExist(username: String): Boolean {
-        return userService.findUserByUsername(username) != null
-    }
 
 }

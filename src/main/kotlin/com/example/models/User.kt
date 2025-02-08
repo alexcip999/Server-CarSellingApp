@@ -1,10 +1,11 @@
 package com.example.models
 
 import io.ktor.auth.*
+import java.util.*
 
 data class User(
-    val id: Int,
-    val username: String,
-    val password: String,
-    var authToken: String? = null
+    val id: UUID = UUID.randomUUID(),
+    val name: String,
+    val email: String,
+    val password: String
 )

@@ -1,6 +1,6 @@
 package com.example.service.dto
 
-data class LoginUserParams(
-    val username: String,
+data class LoginParam(
+    val email: String,
     val password: String
 )

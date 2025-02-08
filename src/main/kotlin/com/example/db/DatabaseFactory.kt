@@ -13,9 +13,6 @@ object DatabaseFactory {
         Database.connect(hikari())
         transaction {
             SchemaUtils.create(UserTable)
-            SchemaUtils.create(CarTable)
-            SchemaUtils.create(CarImagesTable)
-            SchemaUtils.create(UserDetailsTable)
         }
     }
 
